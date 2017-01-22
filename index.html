@@ -9,6 +9,13 @@ body {
 	background-color: #CBF0BD;
 }
 
+.firstLine td{
+    border-bottom: 10px solid black;
+	border-left: 10px solid black;
+	border-right: 10px solid black;
+	border-top: 10px solid black;
+}
+
 h1.left {
 	text-align: left;
 }
@@ -18,15 +25,16 @@ h1.right {
 }
 
 .buttons {
-    height: 150px;
-    width: 150px;
+    height: 130px;
+    width: 130px;
 	font-size: 50px;
+	background-color: #4CAF50;
 }
 
 .table {
     margin: auto;
     padding: 10px;
-	background-color: #b44d2c;
+	background-color: #000000;
 }
 
 .message {
@@ -138,34 +146,42 @@ function spotFree(spotID) {
 function checkForWinner() {
 	if(allTheSame(document.getElementById(1).innerHTML, document.getElementById(2).innerHTML, document.getElementById(3).innerHTML)) {
 		winner = document.getElementById(1).innerHTML;
+		paintWinningCombo(1,2,3);
 		return true;
 	}
 	else if(allTheSame(document.getElementById(4).innerHTML, document.getElementById(5).innerHTML, document.getElementById(6).innerHTML)) {
 		winner = document.getElementById(4).innerHTML;
+		paintWinningCombo(4,5,6);
 		return true;
 	}
 	else if(allTheSame(document.getElementById(7).innerHTML, document.getElementById(8).innerHTML, document.getElementById(9).innerHTML)) {
 		winner = document.getElementById(7).innerHTML;
+		paintWinningCombo(7,8,9);
 		return true;
 	}
 	else if(allTheSame(document.getElementById(1).innerHTML, document.getElementById(4).innerHTML, document.getElementById(7).innerHTML)) {
 		winner = document.getElementById(1).innerHTML;
+		paintWinningCombo(1,4,7);
 		return true;
 	}
 	else if(allTheSame(document.getElementById(2).innerHTML, document.getElementById(5).innerHTML, document.getElementById(8).innerHTML)) {
 		winner = document.getElementById(2).innerHTML;
+		paintWinningCombo(2,5,8);
 		return true;
 	}
 	else if(allTheSame(document.getElementById(3).innerHTML, document.getElementById(6).innerHTML, document.getElementById(9).innerHTML)) {
 		winner = document.getElementById(3).innerHTML;
+		paintWinningCombo(3,6,9);
 		return true;
 	}
 	else if(allTheSame(document.getElementById(1).innerHTML, document.getElementById(5).innerHTML, document.getElementById(9).innerHTML)) {
 		winner = document.getElementById(1).innerHTML;
+		paintWinningCombo(1,5,9);
 		return true;
 	}
 	else if(allTheSame(document.getElementById(3).innerHTML, document.getElementById(5).innerHTML, document.getElementById(7).innerHTML)) {
 		winner = document.getElementById(3).innerHTML;
+		paintWinningCombo(3,5,7);
 		return true;
 	}
 	return false;
@@ -177,6 +193,12 @@ function allTheSame(str1, str2, str3) {
 		return true;
 	}
 	return false;
+}
+
+function paintWinningCombo(x, y, z) {
+	document.getElementById(x).style.color = 'red';
+	document.getElementById(y).style.color = 'red';
+	document.getElementById(z).style.color = 'red';
 }
 
 //Small function to swap the message seen at the bottom of the page. 
@@ -197,7 +219,8 @@ function resetGame() {
 	turns = 0;
 	winner = "";
 	for(i = 1; i < 10; i++) {
-		winner = document.getElementById(i).innerHTML = "";
+		document.getElementById(i).innerHTML = "";
+		document.getElementById(i).style.color = 'black';
 	}
 	document.getElementById("message").innerHTML = "Player One (X). Choose a Spot!";
 }
@@ -206,7 +229,7 @@ function resetGame() {
 </head>
 
 <body>
-
+	
 	<div style="clear: both">
 		<h1 style="float: left">Player X's Score</h1>
 		<h1 style="float: right">Player O's Score</h1>
@@ -219,10 +242,11 @@ function resetGame() {
 	
 	<br><br>
 
+	
 
 	<!–– Potential to use JSTL here for table. Keeping it basic for now.	––>
 	<table class="table" id="table">
-		<tr>
+		<tr class="firstline">
 			<td style="text-align: center; vertical-align: middle;">
 				 <button class="buttons" id="1" onclick="chooseSpot(id)"></button> <BR>
 			</td>
@@ -234,7 +258,7 @@ function resetGame() {
 			</td>
 		</tr>
 		
-		<tr>
+		<tr class="firstline">
 			<td style="text-align: center; vertical-align: middle;">
 				 <button class="buttons" id="4" onclick="chooseSpot(id)"></button> <BR>
 			</td>
@@ -246,7 +270,7 @@ function resetGame() {
 			</td>
 		</tr>
 		
-		<tr>
+		<tr class="firstline">
 			<td style="text-align: center; vertical-align: middle;">
 				 <button class="buttons" id="7" onclick="chooseSpot(id)"></button> <BR>
 			</td>
