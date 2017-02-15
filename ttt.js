@@ -4,6 +4,7 @@ var turns = 0;
 var winner = "";
 var xScore = 0;
 var oScore = 0;
+var timer = null;
 
 //Function called whenever one of the buttons(spots) is clicked. Will fill the spot with an X or O...
 //...depending on whose turn it is.
@@ -145,11 +146,24 @@ function allTheSame(str1, str2, str3) {
   return false;
 }
 
-//Helper Function. Paints the winning combination red.
+//Helper Function. Flashes the winning combo.
 function paintWinningCombo(dom, x, y, z) {
-  dom.byId(x+"").style.color = 'red';
-  dom.byId(y+"").style.color = 'red';
-  dom.byId(z+"").style.color = 'red';
+  
+	
+    var color = 'red';
+    
+    timer = setInterval(function() {
+      dom.byId(x+"").style.color = color;
+      dom.byId(y+"").style.color = color;
+      dom.byId(z+"").style.color = color;
+	  if(color === 'black') {
+	    color = 'red';
+	  }
+	  else {
+	    color = 'black';
+	  } 
+    }, 100);
+  
 }
 
 //Small function to swap the message seen at the bottom of the page. 
@@ -164,26 +178,31 @@ function messageSwitch(dom) {
 }
 
 function setRandomColor(dom) {
-  require(["dojo/dom-style"], function(domStyle){
+  require(["dojo/dom-style", "dojo/query"], function(domStyle, query){
     var r = Math.floor(Math.random() * 256);
     var g = Math.floor(Math.random() * 256);
     var b = Math.floor(Math.random() * 256);
     var color = "rgb(" + r + ", " + g + ", " + b + ")";
 	var color2 = "rgb(" + (255-r) + ", " + (255-g) + ", " + (255-b) + ")";
 	dojo.style("body", {"background-color": color});
-	dojo.style("message", {"color": color2});
-	dojo.style("scoresX", {"color": color2});
-	dojo.style("scoresO", {"color": color2});
-	dojo.style("xScore", {"color": color2});
-	dojo.style("oScore", {"color": color2});
+	query(".font").style("color", color2);
+	query(".message").style("color", color2);
+	
+	r = Math.floor(Math.random() * 256);
+    g = Math.floor(Math.random() * 256);
+    b = Math.floor(Math.random() * 256);
+    color = "rgb(" + r + ", " + g + ", " + b + ")";
+	color2 = "rgb(" + (255-r) + ", " + (255-g) + ", " + (255-b) + ")";
+	query(".buttons").style("background-color", color);
+	query(".buttons").style("color", color2);
   });
-  
 }
 
 
 //Function to reset the game without reloading the page itself.
 function resetGame() {
   require(["dojo", "dojo/dom"], function(dom){
+	clearTimeout(timer);
     turn = "X";
     turns = 0;
     winner = "";
