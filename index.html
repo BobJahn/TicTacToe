@@ -1,250 +1,33 @@
 <!–– Robert Jahn. Web-based tic-tac-toe applet.	Languages used include html, css, js.
-	Logic of detecting the winner could be improved. Also an option might be to use jstl
-	in order to generate the tables in a cleaner way. 
+	Logic of detecting the winner could be improved. 
 ––>
 
 <html>
-<style>
-body {
-	background-color: #CBF0BD;
-}
 
-.firstLine td{
-    	border-bottom: 10px solid black;
-	border-left: 10px solid black;
-	border-right: 10px solid black;
-	border-top: 10px solid black;
-}
-
-h1.left {
-	text-align: left;
-}
-
-h1.right {
-	text-align: right;
-}
-
-.buttons {
-    	height: 130px;
-    	width: 130px;
-	font-size: 50px;
-	background-color: #4CAF50;
-}
-
-.table {
-    	margin: auto;
-    	padding: 10px;
-	background-color: #000000;
-}
-
-.message {
-	text-align: center;
-	color: darkblue;
-}
-
-.retry {
-	text-align: center;
-	color: darkblue;
-}
-
-.retryButton {
-	height: 40px;
-    	width: 180px;
-	font-size: 16px;
-}
-
-</style>
 
 <head>
 <title>Tic Tac Toe</title>
-
-<script>
-
-//Global for now. Perhaps a better solution?
-var turn = "X";
-var turns = 0;
-var winner = "";
-var xScore = 0;
-var oScore = 0;
-
-//Function called whenever one of the buttons(spots) is clicked. Will fill the spot with an X or O...
-//...depending on whose turn it is.
-function chooseSpot(spotID) {
-	if(turns == 9) {
-		if(checkForWinner()) {
-			document.getElementById("message").innerHTML = "Game Over! " + winner + " is the winner!";
-			if(winner == "X") {
-				xScore++;
-			}
-			else {
-				oScore++;
-			}
-			document.getElementById("xScore").innerHTML = xScore;
-			document.getElementById("oScore").innerHTML = oScore;
-		}
-		else {
-			document.getElementById("message").innerHTML = "Game Over! No winner!";
-		}
-	}
-	else if(winner == ""){
-		if(spotFree(spotID)) {
-			document.getElementById(spotID).innerHTML = turn;
-			if(checkForWinner()) {
-				document.getElementById("message").innerHTML = "Game Over! " + winner + " is the winner!";
-				if(winner == "X") {
-					xScore++;
-				}
-				else {
-					oScore++;
-				}
-				document.getElementById("xScore").innerHTML = xScore;
-				document.getElementById("oScore").innerHTML = oScore;
-			}
-			else {
-				if(turn == "X") {
-					turn = "O";
-				}
-				else {
-					turn = "X";
-				}
-				messageSwitch();
-				turns++;
-				
-				if(turns == 9) {
-					if(checkForWinner()) {
-						document.getElementById("message").innerHTML = "Game Over! " + winner + " is the winner!";
-						if(winner == "X") {
-							xScore++;
-						}
-						else {
-							oScore++;
-						}
-						document.getElementById("xScore").innerHTML = xScore;
-						document.getElementById("oScore").innerHTML = oScore;
-					}
-					else {
-						document.getElementById("message").innerHTML = "Game Over! No winner!";
-					}
-				}
-			}
-		}
-		else {
-			document.getElementById("message").innerHTML = "Spot Taken Player " + turn + ". Try again!";
-		}
-	}
-}
-
-//Small helper function. Checks if a spot has been taken.
-function spotFree(spotID) {
-	if(document.getElementById(spotID).innerHTML == "") {
-		return true;
-	}
-	return false;
-}
-
-//Helper function. Checks to see if victory has happened. Likely a better solution.
-function checkForWinner() {
-	if(allTheSame(document.getElementById(1).innerHTML, document.getElementById(2).innerHTML, document.getElementById(3).innerHTML)) {
-		winner = document.getElementById(1).innerHTML;
-		paintWinningCombo(1,2,3);
-		return true;
-	}
-	else if(allTheSame(document.getElementById(4).innerHTML, document.getElementById(5).innerHTML, document.getElementById(6).innerHTML)) {
-		winner = document.getElementById(4).innerHTML;
-		paintWinningCombo(4,5,6);
-		return true;
-	}
-	else if(allTheSame(document.getElementById(7).innerHTML, document.getElementById(8).innerHTML, document.getElementById(9).innerHTML)) {
-		winner = document.getElementById(7).innerHTML;
-		paintWinningCombo(7,8,9);
-		return true;
-	}
-	else if(allTheSame(document.getElementById(1).innerHTML, document.getElementById(4).innerHTML, document.getElementById(7).innerHTML)) {
-		winner = document.getElementById(1).innerHTML;
-		paintWinningCombo(1,4,7);
-		return true;
-	}
-	else if(allTheSame(document.getElementById(2).innerHTML, document.getElementById(5).innerHTML, document.getElementById(8).innerHTML)) {
-		winner = document.getElementById(2).innerHTML;
-		paintWinningCombo(2,5,8);
-		return true;
-	}
-	else if(allTheSame(document.getElementById(3).innerHTML, document.getElementById(6).innerHTML, document.getElementById(9).innerHTML)) {
-		winner = document.getElementById(3).innerHTML;
-		paintWinningCombo(3,6,9);
-		return true;
-	}
-	else if(allTheSame(document.getElementById(1).innerHTML, document.getElementById(5).innerHTML, document.getElementById(9).innerHTML)) {
-		winner = document.getElementById(1).innerHTML;
-		paintWinningCombo(1,5,9);
-		return true;
-	}
-	else if(allTheSame(document.getElementById(3).innerHTML, document.getElementById(5).innerHTML, document.getElementById(7).innerHTML)) {
-		winner = document.getElementById(3).innerHTML;
-		paintWinningCombo(3,5,7);
-		return true;
-	}
-	return false;
-}
-
-//Helper function. Checks if three strings are the same and also not empty.
-function allTheSame(str1, str2, str3) {
-	if(str1 == str2 && str1 == str3 && str1 != "") {
-		return true;
-	}
-	return false;
-}
-
-function paintWinningCombo(x, y, z) {
-	document.getElementById(x).style.color = 'red';
-	document.getElementById(y).style.color = 'red';
-	document.getElementById(z).style.color = 'red';
-}
-
-//Small function to swap the message seen at the bottom of the page. 
-function messageSwitch() {
-	currentMessage = document.getElementById("message").innerHTML;
-	if(currentMessage.includes("X")) {
-		document.getElementById("message").innerHTML = "Player Two (O). Choose a Spot!";
-	}
-	else {
-		document.getElementById("message").innerHTML = "Player One (X). Choose a Spot!";
-	}
-}
-
-
-//Function to reset the game without reloading the page itself.
-function resetGame() {
-	turn = "X";
-	turns = 0;
-	winner = "";
-	for(i = 1; i < 10; i++) {
-		document.getElementById(i).innerHTML = "";
-		document.getElementById(i).style.color = 'black';
-	}
-	document.getElementById("message").innerHTML = "Player One (X). Choose a Spot!";
-}
-</script>
-
+<link rel="stylesheet" type="text/css" href="lib/style.css">
+<script data-dojo-config="async: 1"
+            src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"></script>
+<script src="scripts/ttt.js"></script>
 </head>
 
-<body>
+<body id="body">
 	
 	<div style="clear: both">
-		<h1 style="float: left">Player X's Score</h1>
-		<h1 style="float: right">Player O's Score</h1>
+		<h2 id="scoresX" class="font" style="float: left">Player X's Score</h1>
+		<h2 id="scoresO" class="font" style="float: right">Player O's Score</h1>
 	</div>
 	
 	<div style="clear: both">
-		<h1 style="float: left" id="xScore">0</h1>
-		<h1 style="float: right" id="oScore">0</h1>
+		<h2 id="xScore" class="font" style="float: left" id="xScore">0</h1>
+		<h2 id="oScore" class="font" style="float: right" id="oScore">0</h1>
 	</div>
 	
-	<br><br>
+	<br>
 
 	
-
-	<!–– Potential to use JSTL here for table. Keeping it basic for now.	––>
 	<table class="table" id="table">
 		<tr class="firstline">
 			<td style="text-align: center; vertical-align: middle;">
@@ -290,7 +73,7 @@ function resetGame() {
 	<h1 class="retry">
 		<button class="retryButton" id="retry" onclick="resetGame()">Retry!</button> <BR>
 	</h1>
-
+	
 </body>
 
 </html>
